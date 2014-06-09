@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="com.willshawmedia.phonegap.StatusMessage"
+    version="1">
+
+    <name>StatusMessage</name>
+    <description>Show message in the status bar</description>
+
+    <js-module src="www/status-message.js" name="StatusMessage">
+        <clobbers target="StatusMessage" />
+    </js-module>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+          <feature name="StatusMessage">
+            <param name="ios-package" value="StatusMessage"/>
+          </feature>
+        </config-file>
+
+        <header-file src="src/ios/StatusMessage.h" />
+        <source-file src="src/ios/StatusMessage.m" />
+
+        <header-file src="src/ios/JDStatusBarNotification/JDStatusBarNotification.h" />
+        <source-file src="src/ios/JDStatusBarNotification/JDStatusBarNotification.m" />
+        <header-file src="src/ios/JDStatusBarNotification/JDStatusBarStyle.h" />
+        <source-file src="src/ios/JDStatusBarNotification/JDStatusBarStyle.m" />
+        <header-file src="src/ios/JDStatusBarNotification/JDStatusBarView.h" />
+        <source-file src="src/ios/JDStatusBarNotification/JDStatusBarView.m" />
+    </platform>
+
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="StatusMessage">
+                <param name="android-package" value="com.willshawmedia.phonegap.StatusMessage"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/StatusMessage.java" target-dir="src/com/willshawmedia/phonegap" />      
+    </platform>
+
+
+</plugin>
