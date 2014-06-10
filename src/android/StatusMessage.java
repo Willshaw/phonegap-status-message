@@ -7,23 +7,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ApplicationInfo;
-import android.content.SharedPreferences;
+import com.willshawmedia.pluginCheck.R;
+
+import android.content.Context;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 
 public class StatusMessage extends CordovaPlugin {
+
+    private int notificationID = 100;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if ( action.equals( "progress" ) ) {
-            this.progress( args.getLong( 0 ), callbackContext );
+//            this.progress( args.getLong( 0 ), callbackContext );
             return true;
         } else if ( action.equals( "show" ) ) {
             String msg = args.getString( 0 );
-            String fade = args.getString( 1 );
-            String style = args.getString( 2 );
-            this.show( msg, fade, style, callbackContext );
+            this.show( msg, callbackContext );
             return true;
         } else if ( action.equals( "hide" ) ) {
             this.hide( callbackContext );
@@ -32,34 +37,40 @@ public class StatusMessage extends CordovaPlugin {
         return false;
     }
 
-    private void progress( Float perc, CallbackContext callbackContext ) {
+    private void progress( Long perc, CallbackContext callbackContext ) {
         try {
             // NSString* str_perc = [arguments objectAtIndex:1];
             
             // CGFloat perc = (CGFloat)[str_perc floatValue];
             // [JDStatusBarNotification showProgress:perc];
             
-            callbackContext.success( packageInfo.versionCode );
+            callbackContext.success();
         } catch ( Exception e ) {
             callbackContext.error( e.getMessage() );
         }
     }
 
-    private void show( String msg, Boolean fade, String style, CallbackContext callbackContext ) {
+    private void show( String msg, CallbackContext callbackContext ) {
         try {
-            // if([fade boolValue]){
-            //     [JDStatusBarNotification
-            //         showWithStatus:message
-            //         dismissAfter:2.0
-            //         styleName: style
-            //      ];
-            // } else {
-            //     [JDStatusBarNotification
-            //         showWithStatus:message
-            //         styleName: style
-            //      ];
-            // }
-            callbackContext.success( packageInfo.versionCode );
+            
+        	Context context=this.cordova.getActivity().getApplicationContext();
+        	
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.status_message_icon)
+                    .setContentTitle( msg )
+                    .setTicker( msg )
+                    .setContentText("Test message");
+            
+            NotificationManager mNotificationManager =
+                (NotificationManager) cordova.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            
+            mNotificationManager.notify(notificationID, mBuilder.build());
+
+            // remove notification as soon as it's shown
+            mNotificationManager.cancel(notificationID);
+            
+            callbackContext.success();
         } catch ( Exception e ) {
             callbackContext.error( e.getMessage() );
         }
@@ -68,8 +79,13 @@ public class StatusMessage extends CordovaPlugin {
 
     private void hide( CallbackContext callbackContext ) {
         try {
-            // [JDStatusBarNotification dismiss];
-            callbackContext.success( packageInfo.versionCode );
+            
+            NotificationManager mNotificationManager =
+                (NotificationManager) cordova.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.cancel(notificationID);
+
+            callbackContext.success();
         } catch ( Exception e ) {
             callbackContext.error( e.getMessage() );
         }
