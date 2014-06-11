@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.willshawmedia.pluginCheck.R;
 
 import android.content.Context;
 import android.app.Activity;
@@ -47,16 +46,23 @@ public class StatusMessage extends CordovaPlugin {
         
             NotificationManager mNotificationManager =
                 (NotificationManager) cordova.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);            
-
-            Context context=this.cordova.getActivity().getApplicationContext();
                 
-            // increment progress bar
+            // make interget percentage from double
             Double incr_double = perc * 100;
             Integer incr = incr_double.intValue();
 
+            Context context=this.cordova.getActivity().getApplicationContext();
+
+            // get icon id
+            int icon_id = context.getResources().getIdentifier(
+                    "status_message_progress",
+                    "drawable",
+                    this.cordova.getActivity().getPackageName()
+                );
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.status_message_progress)
+                    .setSmallIcon( icon_id )
                     .setContentTitle( msg )
                     .setTicker( msg )
                     .setNumber( incr )
@@ -77,12 +83,18 @@ public class StatusMessage extends CordovaPlugin {
 
     private void show( String msg, CallbackContext callbackContext ) {
         try {
-            
-        	Context context=this.cordova.getActivity().getApplicationContext();
-        	
+            Context context=this.cordova.getActivity().getApplicationContext();
+
+            // get icon id
+            int icon_id = context.getResources().getIdentifier(
+                    "status_message_progress",
+                    "drawable",
+                    this.cordova.getActivity().getPackageName()
+                );
+
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.status_message_icon)
+                    .setSmallIcon( icon_id )
                     .setContentTitle( msg )
                     .setTicker( msg )
                     .setContentText("Test message");
