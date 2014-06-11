@@ -87,7 +87,7 @@ public class StatusMessage extends CordovaPlugin {
 
             // get icon id
             int icon_id = context.getResources().getIdentifier(
-                    "status_message_progress",
+                    "status_message_icon",
                     "drawable",
                     this.cordova.getActivity().getPackageName()
                 );
