@@ -60,9 +60,9 @@ public class StatusMessage extends CordovaPlugin {
                     .setContentTitle( msg )
                     .setTicker( msg )
                     .setNumber( incr )
-                    .setContentText( "In progress" );
+                    .setContentText( "In progress" )
+                    .setProgress( 100, incr, false );
 
-            mBuilder.setProgress( 100, incr, false );
             mNotificationManager.notify( notification_progress, mBuilder.build() );
 
             if( perc >= 1 ) {
