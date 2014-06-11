@@ -17,10 +17,4 @@ For Android add a **status_message_icon.png** to the **res/drawable** folders, t
 
 #### Remove 
 
-<<<<<<< HEAD
 ```cordova plugin remove com.willshawmedia.phonegap.StatusMessage```
-=======
-```cordova plugin remove com.willshawmedia.phonegap.NativeChecks```
->>>>>>> FETCH_HEAD
-
-### Methods
