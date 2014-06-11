@@ -19,12 +19,17 @@ import android.support.v4.app.NotificationCompat;
 
 public class StatusMessage extends CordovaPlugin {
 
-    private int notificationID = 100;
+    private int notification_static = 111;
+    private int notification_progress = 222;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if ( action.equals( "progress" ) ) {
-//            this.progress( args.getLong( 0 ), callbackContext );
+            String msg = args.getString( 0 ); 
+            String tmp_perc = args.getString( 1 ); 
+            double perc = Double.parseDouble(tmp_perc);
+
+            this.progress( msg, perc, callbackContext );
             return true;
         } else if ( action.equals( "show" ) ) {
             String msg = args.getString( 0 );
@@ -37,14 +42,34 @@ public class StatusMessage extends CordovaPlugin {
         return false;
     }
 
-    private void progress( Long perc, CallbackContext callbackContext ) {
+    private void progress( String msg, double perc, CallbackContext callbackContext ) {
         try {
-            // NSString* str_perc = [arguments objectAtIndex:1];
+        
+            NotificationManager mNotificationManager =
+                (NotificationManager) cordova.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);            
+
+            Context context=this.cordova.getActivity().getApplicationContext();
+                
+            // increment progress bar
+            Double incr_double = perc * 100;
+            Integer incr = incr_double.intValue();
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.status_message_progress)
+                    .setContentTitle( msg )
+                    .setTicker( msg )
+                    .setNumber( incr )
+                    .setContentText( "In progress" );
+
+            mBuilder.setProgress( 100, incr, false );
+            mNotificationManager.notify( notification_progress, mBuilder.build() );
+
+            if( perc >= 1 ) {
+                mNotificationManager.cancel( notification_progress );
+            }
             
-            // CGFloat perc = (CGFloat)[str_perc floatValue];
-            // [JDStatusBarNotification showProgress:perc];
-            
-            callbackContext.success();
+            callbackContext.success("val was " + perc + " and msg was " + msg);
         } catch ( Exception e ) {
             callbackContext.error( e.getMessage() );
         }
@@ -65,16 +90,15 @@ public class StatusMessage extends CordovaPlugin {
             NotificationManager mNotificationManager =
                 (NotificationManager) cordova.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
             
-            mNotificationManager.notify(notificationID, mBuilder.build());
+            mNotificationManager.notify( notification_static, mBuilder.build() );
 
             // remove notification as soon as it's shown
-            mNotificationManager.cancel(notificationID);
+            mNotificationManager.cancel( notification_static );
             
             callbackContext.success();
         } catch ( Exception e ) {
             callbackContext.error( e.getMessage() );
         }
-
     }
 
     private void hide( CallbackContext callbackContext ) {
@@ -83,7 +107,7 @@ public class StatusMessage extends CordovaPlugin {
             NotificationManager mNotificationManager =
                 (NotificationManager) cordova.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
-            mNotificationManager.cancel(notificationID);
+            mNotificationManager.cancel( notification_static );
 
             callbackContext.success();
         } catch ( Exception e ) {

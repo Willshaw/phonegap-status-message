@@ -1,16 +1,28 @@
 var StatusMessage = {
-    progress: function( perc ) {
+    progress: function( msg, perc ) {
         cordova.exec(
-            function() {},
+            function( msg ) {
+                console.log('it worked: ' + msg);
+            },
             function(err) {
                 console.log( err );
             },
             "StatusMessage",
             "progress",
-            [ perc ]
+            [ msg, perc ]
         );
+            // [{ "msg": msg, "perc": perc }]
     },
     show: function( text, fade, style ) {
+
+        if( typeof fade === 'undefined' ) {
+            fade = 0;
+        }
+
+        if( typeof style === 'undefined' ) {
+            style = '';
+        }        
+
         cordova.exec(
             function() {},
             function(err) {
