@@ -3,8 +3,8 @@
 
 @interface StatusMessage : CDVPlugin
 
-- (void) progress:(CDVInvokedCommand*)command;
-- (void) show:(CDVInvokedCommand*)command;
-- (void) hide:(CDVInvokedCommand*)command;
+- (void) progress:(CDVInvokedUrlCommand*)command;
+- (void) show:(CDVInvokedUrlCommand*)command;
+- (void) hide:(CDVInvokedUrlCommand*)command;
 
 @end
