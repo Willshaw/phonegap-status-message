@@ -14,22 +14,12 @@
 }
 
 - (void)show:(CDVInvokedUrlCommand*)command {
-    NSString* message = [command.arguments objectAtIndex:1];
-    NSString* fade = [command.arguments objectAtIndex:2];
-    NSString* style = [command.arguments objectAtIndex:3];
-    
-    if([fade boolValue]){
-        [JDStatusBarNotification
-            showWithStatus:message
-            dismissAfter:2.0
-            styleName: style
-         ];
-    } else {
-        [JDStatusBarNotification
-            showWithStatus:message
-            styleName: style
-         ];
-    }
+    NSString* message = [command.arguments objectAtIndex:0];
+
+    [JDStatusBarNotification
+        showWithStatus:message
+        dismissAfter:2.0
+     ];
 }
 
 - (void)hide:(CDVInvokedUrlCommand*)command {
